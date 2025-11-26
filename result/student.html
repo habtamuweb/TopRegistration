@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Results </title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      padding: 20px;  
+      background-size: cover;
+      background-image: url('clo.jpg');
+      background-repeat: no-repeat; 
+    }
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      border: none;
+      background: white;
+      margin-bottom: 20px;
+    }
+    th, td { 
+      border: 1px solid #ccc; 
+      text-align: center; 
+      padding: 8px;
+    }
+    th { 
+      background: #04ab287c; 
+    }
+    input { 
+      width: 100%; 
+      text-align: center; 
+      border: none;
+      background: transparent;
+    }
+    button { 
+      margin: 5px; 
+      padding: 8px 15px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+    }
+    .btn-primary { background: #04ab287c; color: white; }
+    .btn-danger { background: #dc3545; color: white; }
+    .btn-warning { background: #ffc107; color: black; }
+    .actions-cell { display: flex; justify-content: center; }
+    .message { padding: 10px; margin: 10px 0; border-radius: 5px; }
+    .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .form-container { 
+      background: white; 
+      padding: 20px; 
+      border-radius: 8px; 
+      margin: 20px 0; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .form-group { margin: 10px 0; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+    .form-group input { 
+      width: 100%; 
+      padding: 8px; 
+      border: 1px solid #ddd; 
+      border-radius: 4px; 
+      background: white;
+    }
+    .stats-container {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>🎓 Student Results Management System </h1>
+
+  <div id="message"></div>
+
+  <!-- Statistics Section -->
+  <!-- <div class="stats-container">
+    <h3>📊 System Statistics</h3>
+    <div id="statistics">
+      Loading statistics...
+    </div>
+  </div> -->
+
+  <!-- Add Student Form -->
+  <div class="form-container">
+    <h3>👨‍🎓 Add New Student</h3>
+    <form id="studentForm">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div class="form-group">
+          <label for="firstName">First Name *</label>
+          <input type="text" id="firstName" required>
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name *</label>
+          <input type="text" id="lastName" required>
+        </div>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px;">
+        <div class="form-group">
+          <label for="maths">Maths (0-100) *</label>
+          <input type="number" id="maths" min="0" max="100" required>
+        </div>
+        <div class="form-group">
+          <label for="english">English (0-100) *</label>
+          <input type="number" id="english" min="0" max="100" required>
+        </div>
+        <div class="form-group">
+          <label for="physics">Physics (0-100) *</label>
+          <input type="number" id="physics" min="0" max="100" required>
+        </div>
+        <div class="form-group">
+          <label for="biology">Biology (0-100) *</label>
+          <input type="number" id="biology" min="0" max="100" required>
+        </div>
+        <div class="form-group">
+          <label for="chemistry">Chemistry (0-100) *</label>
+          <input type="number" id="chemistry" min="0" max="100" required>
+        </div>
+        <div class="form-group">
+          <label for="history">History (0-100) *</label>
+          <input type="number" id="history" min="0" max="100" required>
+        </div>
+      </div>
+      
+      <button type="submit" class="btn-primary">💾 Save Student</button>
+      <button type="button" onclick="clearForm()">🗑️ Clear Form</button>
+    </form>
+  </div>
+
+  <!-- Students Table -->
+  <table id="studentTable">
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Maths</th>
+        <th>English</th>
+        <th>Physics</th>
+        <th>Biology</th>
+        <th>Chemistry</th>
+        <th>History</th>
+        <th>Total</th>
+        <th>Average</th>
+        <th>Grade</th>
+        <th>Rank</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="studentTableBody">
+      <!-- Students will be loaded here -->
+    </tbody>
+  </table>
+
+  <div style="margin-top: 20px;">
+    <button onclick="loadStudents()" class="btn-primary">🔄 Refresh Data</button>
+    <button onclick="exportToCSV()" class="btn-primary">📊 Export to CSV</button>
+    <button onclick="showStatistics()" class="btn-primary">📈 Refresh Statistics</button>
+    <button onclick="clearAllStudents()" class="btn-danger">🗑️ Clear All Students</button>
+  </div>
+
+  <footer style="text-align: center; margin-top: 50px;">
+    &copy;2025 | created by H.A | all right reserved
+  </footer>
+
+  <script>
+    const API_BASE = 'http://localhost:3000/api';
+
+    // Load students and statistics when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        loadStudents();
+        showStatistics();
+    });
+
+    // Load all students
+    async function loadStudents() {
+        try {
+            const response = await fetch(`${API_BASE}/students`);
+            const result = await response.json();
+            
+            if (result.data) {
+                displayStudents(result.data);
+            }
+        } catch (error) {
+            showMessage('Error loading students: ' + error.message, 'error');
+            console.error('Load error:', error);
+        }
+    }
+
+    // Display students in table
+    function displayStudents(students) {
+        const tbody = document.getElementById('studentTableBody');
+        tbody.innerHTML = '';
+
+        if (students.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="13" style="text-align: center; padding: 20px;">No students found. Add some students to get started!</td></tr>';
+            return;
+        }
+
+        students.forEach((student, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${student.first_name}</td>
+                <td>${student.last_name}</td>
+                <td>${student.maths}</td>
+                <td>${student.english}</td>
+                <td>${student.physics}</td>
+                <td>${student.biology}</td>
+                <td>${student.chemistry}</td>
+                <td>${student.history}</td>
+                <td><strong>${student.total}</strong></td>
+                <td><strong>${student.average.toFixed(2)}</strong></td>
+                <td><strong>${student.grade}</strong></td>
+                <td><strong>#${student.rank || (index + 1)}</strong></td>
+                <td class="actions-cell">
+                    <button onclick="editStudent('${student._id}')" class="btn-warning">✏️ Edit</button>
+                    <button onclick="deleteStudent('${student._id}')" class="btn-danger">🗑️ Delete</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    // Handle form submission - IMPROVED VERSION
+document.getElementById('studentForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  try {
+    // Get and validate form data
+    const formData = new FormData(this);
+    const studentData = {
+      first_name: document.getElementById('firstName').value.trim(),
+      last_name: document.getElementById('lastName').value.trim(),
+      maths: Math.max(0, Math.min(100, parseInt(document.getElementById('maths').value) || 0)),
+      english: Math.max(0, Math.min(100, parseInt(document.getElementById('english').value) || 0)),
+      physics: Math.max(0, Math.min(100, parseInt(document.getElementById('physics').value) || 0)),
+      biology: Math.max(0, Math.min(100, parseInt(document.getElementById('biology').value) || 0)),
+      chemistry: Math.max(0, Math.min(100, parseInt(document.getElementById('chemistry').value) || 0)),
+      history: Math.max(0, Math.min(100, parseInt(document.getElementById('history').value) || 0))
+    };
+
+    // Validation
+    if (!studentData.first_name || !studentData.last_name) {
+      showMessage('Please enter both first and last name', 'error');
+      return;
+    }
+
+    console.log('Sending student data:', studentData);
+
+    // Send to backend
+    const response = await fetch(`${API_BASE}/students`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(studentData)
+    });
+
+    const result = await response.json();
+    
+    if (response.ok) {
+      showMessage('✅ Student added successfully!', 'success');
+      clearForm();
+      loadStudents();
+      showStatistics();
+    } else {
+      showMessage('❌ Error: ' + result.error, 'error');
+      console.error('Backend error:', result);
+    }
+  } catch (error) {
+    showMessage('❌ Network error: ' + error.message, 'error');
+    console.error('Network error:', error);
+  }
+});
+    // Clear form
+    function clearForm() {
+        document.getElementById('studentForm').reset();
+    }
+
+    // Delete student
+    async function deleteStudent(id) {
+        if (confirm('Are you sure you want to delete this student?')) {
+            try {
+                const response = await fetch(`${API_BASE}/students/${id}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage('Student deleted successfully!', 'success');
+                    loadStudents();
+                    showStatistics();
+                } else {
+                    showMessage('Error deleting student: ' + result.error, 'error');
+                }
+            } catch (error) {
+                showMessage('Error deleting student: ' + error.message, 'error');
+            }
+        }
+    }
+
+    // Export to CSV
+    async function exportToCSV() {
+        try {
+            window.open(`${API_BASE}/export/csv`, '_blank');
+            showMessage('CSV export started!', 'success');
+        } catch (error) {
+            showMessage('Error exporting CSV: ' + error.message, 'error');
+        }
+    }
+
+    // Show statistics
+    async function showStatistics() {
+        try {
+            const response = await fetch(`${API_BASE}/statistics`);
+            const stats = await response.json();
+            
+            const statsDiv = document.getElementById('statistics');
+            if (stats.totalStudents === 0) {
+                statsDiv.innerHTML = 'No students in the database.';
+                return;
+            }
+            
+            let gradeDistributionHtml = '';
+            for (const [grade, count] of Object.entries(stats.gradeDistribution)) {
+                gradeDistributionHtml += `<span style="margin-right: 15px;"><strong>${grade}:</strong> ${count}</span>`;
+            }
+            
+            statsDiv.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                    <div><strong>Total Students:</strong> ${stats.totalStudents}</div>
+                    <div><strong>Average Total Score:</strong> ${stats.averageTotal}</div>
+                    <div><strong>Highest Score:</strong> ${stats.highestScore}</div>
+                    <div><strong>Lowest Score:</strong> ${stats.lowestScore}</div>
+                </div>
+                <div style="margin-top: 10px;">
+                    <strong>Grade Distribution:</strong><br>
+                    ${gradeDistributionHtml}
+                </div>
+            `;
+        } catch (error) {
+            document.getElementById('statistics').innerHTML = 'Error loading statistics.';
+        }
+    }
+
+    // Show message
+    function showMessage(message, type) {
+        const messageDiv = document.getElementById('message');
+        messageDiv.textContent = message;
+        messageDiv.className = `message ${type}`;
+        
+        setTimeout(() => {
+            messageDiv.textContent = '';
+            messageDiv.className = '';
+        }, 5000);
+    }
+
+    // Clear all students
+    async function clearAllStudents() {
+        if (confirm('Are you sure you want to delete ALL students? This action cannot be undone!')) {
+            try {
+                const response = await fetch(`${API_BASE}/students`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage('All students deleted successfully!', 'success');
+                    loadStudents();
+                    showStatistics();
+                } else {
+                    showMessage('Error deleting students: ' + result.error, 'error');
+                }
+            } catch (error) {
+                showMessage('Error deleting students: ' + error.message, 'error');
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
