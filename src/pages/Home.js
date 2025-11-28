@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image';
 import Row from 'react-bootstrap/Row';
 import Carousel from 'react-bootstrap/Carousel';
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion"
 import Card from 'react-bootstrap/Card';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faThumbsUp} from '@fortawesome/free-solid-svg-icons';
