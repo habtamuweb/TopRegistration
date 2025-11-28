@@ -13,51 +13,51 @@ import Card from 'react-bootstrap/Card';
 export default function Home() {
   return (
     <div>
- <motion.div
-      className="text-lg font-bold text-purple-600"
-      animate={{ x: ["100%", "-50%"] }}
-      transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
-      style={{ whiteSpace: "nowrap" }}
-    >
-      🎉 Welcome to Yegna Trading Store – Best Deals Everyday! 🎉
-    </motion.div>
+ // <motion.div
+ //      className="text-lg font-bold text-purple-600"
+ //      animate={{ x: ["100%", "-50%"] }}
+ //      transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+ //      style={{ whiteSpace: "nowrap" }}
+ //    >
+ //      🎉 Welcome to Yegna Trading Store – Best Deals Everyday! 🎉
+ //    </motion.div>
     
     
- <Container>
-      <Row>
-        <Col xs={6} md={3}>
-          <div id='TOP' style={{height:'500px',backgroundImage:'url(image2.png)',marginLeft:'-70px',width:'400px'}}>
+ // <Container>
+ //      <Row>
+ //        <Col xs={6} md={3}>
+ //          <div id='TOP' style={{height:'500px',backgroundImage:'url(image2.png)',marginLeft:'-70px',width:'400px'}}>
     
-    <br/><br/><motion.h2 style={{marginLeft:'0px',marginTop:'',color:'blue'}}
-      className="text-2xl font-bold text-blue-600"
-      animate={{ y: [0, -20, 0] }}
-      transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-    >
-          {/* <FontAwesomeIcon icon={faThumbsUp} /> */}  🛒 Shop our quality Rebar <br/> Products! 
-    </motion.h2>
+ //    <br/><br/><motion.h2 style={{marginLeft:'0px',marginTop:'',color:'blue'}}
+ //      className="text-2xl font-bold text-blue-600"
+ //      animate={{ y: [0, -20, 0] }}
+ //      transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+ //    >
+ //          {/* <FontAwesomeIcon icon={faThumbsUp} /> */}  🛒 Shop our quality Rebar <br/> Products! 
+ //    </motion.h2>
    
-          </div>
+ //          </div>
         
-        </Col>
-        <Col xs={6} md={9}>
-          <div style={{backgroundImage:'url(image3.png)',height:'500px',marginLeft:'40px',opacity:'0.7', width:'100%'}}>
+ //        </Col>
+ //        <Col xs={6} md={9}>
+ //          <div style={{backgroundImage:'url(image3.png)',height:'500px',marginLeft:'40px',opacity:'0.7', width:'100%'}}>
  
-   <motion.h2
-      initial={{ opacity: 0, y: -50 }}
-      animate={{ opacity: 1, y: 10 }}
-      transition={{ duration: 4 }}
-      style={{ fontSize: "2rem", fontWeight: "bold", color: "green" ,marginLeft:'150px'}}
-    >
-      Welcome to our E-commerce
-    </motion.h2>
-    <motion.h4  
-      initial={{ opacity: 0, x: 50 }}
-      animate={{ opacity: 1, x: -50 }}
-      transition={{ duration: 4 }}
-      style={{ fontSize: "2rem", fontWeight: "bold", color: "green" ,marginLeft:'200px'}}
-    >
-      Digital platform
-    </motion.h4>
+ //   <motion.h2
+ //      initial={{ opacity: 0, y: -50 }}
+ //      animate={{ opacity: 1, y: 10 }}
+ //      transition={{ duration: 4 }}
+ //      style={{ fontSize: "2rem", fontWeight: "bold", color: "green" ,marginLeft:'150px'}}
+ //    >
+ //      Welcome to our E-commerce
+ //    </motion.h2>
+ //    <motion.h4  
+ //      initial={{ opacity: 0, x: 50 }}
+ //      animate={{ opacity: 1, x: -50 }}
+ //      transition={{ duration: 4 }}
+ //      style={{ fontSize: "2rem", fontWeight: "bold", color: "green" ,marginLeft:'200px'}}
+ //    >
+ //      Digital platform
+ //    </motion.h4>
 
  <div style={{width:'500px',height:'500px',marginLeft:'150px'}}>
 <Carousel data-bs-theme="dark">
